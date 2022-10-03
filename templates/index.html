@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Jokes App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+{% verbatim %}
+
+<div class="container" id="app">
+    {{ message }}
+    <div class="row">
+        <div v-for="pic in pics" class="col-6 mx-auto mt-5">
+            <h1>Cats Slider</h1>
+            <img :src="pic.uri">
+        </div>
+    </div>
+</div>
+
+{% endverbatim %}
+<script>
+
+const { createApp } = Vue;
+
+const CoinsApp = {
+    data(){
+        return {
+            message: "Hello world",
+            pics: null
+        }
+    },
+    created() {
+        const socket = new WebSocket(`ws://${window.location.host}/ws/pics/`);
+
+        let _this = this;
+
+        socket.onmessage = function(event){
+            console.log(event.data);
+            _this.pics=JSON.parse(event.data);
+            console.log(11111, _this.pic);
+        }
+    }
+}
+
+createApp(CoinsApp).mount('#app')
+
+</script>
+</body>
+</html>
